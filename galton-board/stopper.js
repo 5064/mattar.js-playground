@@ -1,9 +1,10 @@
 class Stopper {
     p5;
     body;
+    r;
 
-    constructor(p5, x, y) {
-        const options = { restitution: 0.2 }
+    constructor(p5, x, y, r) {
+        const options = { isStatic: true }
         this.p5 = p5 // inject p5 instance
         this.body = Matter.Bodies.circle(x, y, r, options)
         this.r = r

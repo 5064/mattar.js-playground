@@ -11,7 +11,7 @@ class Particle {
 
     show = () => {
         this.p5.fill(255);
-        this.p5.stroke(255);
+        this.p5.stroke("#ff00ae");
         const pos = this.body.position;
         this.p5.push()  // translate is accumulative
         this.p5.translate(pos.x, pos.y)
