@@ -1,7 +1,6 @@
 class Obstacle {
-    static SPACING = 20;
-    static COLS = 12;
-    static ROWS = this.COLS + 2;
+    static SPACING = 30;
+    static ROWS = 12;
 
     p5;
     body;
