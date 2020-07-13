@@ -3,7 +3,10 @@ class Particle {
     body;
 
     constructor(p5, x, y, r) {
-        const options = { restitution: 0.2 }
+        const options = {
+            restitution: 0,
+            friction: 0
+        }
         this.p5 = p5 // inject p5 instance
         this.body = Matter.Bodies.circle(x, y, r, options)
         this.r = r

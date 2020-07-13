@@ -10,13 +10,14 @@ const GaltonBoard = (p5) => {
     let storages = [];
     let stopper;
 
-    const MAX_PARTICLES = 200;
+    const MAX_PARTICLES = 100;
 
     const CANVAS_X = 500
     const CANVAS_Y = 800
     const START_X = CANVAS_X / 2
     const START_Y = 150;
-    const PARTICLE_R = 5
+    const PARTICLE_R = 3
+    const OBS_R = 4
 
     p5.setup = () => {
         p5.createCanvas(CANVAS_X, CANVAS_Y);
@@ -38,21 +39,32 @@ const GaltonBoard = (p5) => {
 
         setupStorage();
 
-        setupStopper();
+        // setupStopper();
     }
 
     setupObstacle = () => {
         for (let i = 0; i < Obstacle.ROWS; i++) {
             let shiftX = 0
-            if (i % 2 === 0) {
-                shiftX = Obstacle.SPACING / 2
+            if (i % 2 !== 0) {
+                shiftX += Obstacle.SPACING / 2  // Partricleが垂直落下したとき中心に
             }
-            for (let j = 0; j < Obstacle.COLS; j++) {
-                const o = new Obstacle(p5, START_X + shiftX + Obstacle.SPACING * j, (START_Y + 50) + Obstacle.SPACING * i, 3);
+            for (let j = 0; j < i + 3; j++) {
+                shiftX += calcIntervalX(j, PARTICLE_R + OBS_R)
+                const shiftY = perpendicular(i, Obstacle.SPACING);
+
+                const o = new Obstacle(p5, START_X + shiftX, (START_Y + 20) + shiftY, OBS_R);
                 Matter.World.add(world, o.body)
                 obstacles.push(o);
             }
         }
+    }
+
+    calcIntervalX = (index, interval) => {
+        return index % 2 === 0 ? index * interval : -1 * index * interval
+    }
+
+    perpendicular = (index, spacing) => {
+        return ((Math.sqrt(3) * spacing) / 2) * index
     }
 
     setupStopper = () => {
@@ -62,8 +74,8 @@ const GaltonBoard = (p5) => {
     }
 
     setupStorage = () => {
-        const sLeft = new PStorage(p5, 0, 0, 0, START_Y, START_X - PARTICLE_R, START_Y);
-        const sRight = new PStorage(p5, CANVAS_X, 0, CANVAS_X, START_Y, START_X + PARTICLE_R, START_Y);
+        const sLeft = new PStorage(p5, 0, 0, 0, START_Y, START_X - PARTICLE_R / 2, START_Y);
+        const sRight = new PStorage(p5, CANVAS_X, 0, CANVAS_X, START_Y, START_X + PARTICLE_R / 2, START_Y);
         Matter.World.add(world, sLeft.body)
         Matter.World.add(world, sRight.body)
         storages.push(...[sLeft, sRight])
@@ -98,7 +110,7 @@ const GaltonBoard = (p5) => {
         for (let s of storages) {
             s.show();
         }
-        stopper.show();
+        // stopper.show();
     }
 
 }
